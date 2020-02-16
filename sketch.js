@@ -7,7 +7,7 @@ function setup() {
   frameRate(2);
   createCanvas(W * F, H * F);
   for (let i = 0; i < W * H; i++) {
-    A.push(255);
+    A.push(1);
   }
   let rand = Math.round((W*H)/2) - W / 2;
   A[rand - 1] = 0;
@@ -23,7 +23,7 @@ function draw() {
   background(255);
   let B = Object.assign([], A);
   B.map((b, i)=>{
-    if(b < 128){
+    if(b < 1){
     let x = i % W;
     let y = Math.floor(i / W);
     point(x * F, y * F);
@@ -36,20 +36,20 @@ function draw() {
       return false;
     }
 
-    if (B[i - 1] < 128) {N++;}
-    if (B[i + 1] < 128) {N++;}
-    if (B[i - W] < 128) {N++;}
-    if (B[i + W] < 128) {N++;}    
-    if (B[i - W - 1] < 128) {N++;}
-    if (B[i - W + 1] < 128) {N++;}
-    if (B[i + W - 1] < 128) {N++;}
-    if (B[i + W + 1] < 128) {N++;}
+    if (B[i - 1] < 1) {N++;}
+    if (B[i + 1] < 1) {N++;}
+    if (B[i - W] < 1) {N++;}
+    if (B[i + W] < 1) {N++;}    
+    if (B[i - W - 1] < 1) {N++;}
+    if (B[i - W + 1] < 1) {N++;}
+    if (B[i + W - 1] < 1) {N++;}
+    if (B[i + W + 1] < 1) {N++;}
     
-    if (N == 2 && A[i] > 128) {
+    if (N == 2 && A[i] > 0) {
       A[i] = 0;
     }
     if(N > 2){
-      A[i] = 255;
+      A[i] = 1;
     }
   });
 }
