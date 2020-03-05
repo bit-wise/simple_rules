@@ -2,8 +2,9 @@
 let W = 8000; // window.innerWidth;
 let H = W; // window.innerHeight;
 let H2 = H / 2;
-let W2 = W / 2;
-let S = 600 * (W / 2000); // scale
+let W2 = W / 1.575;
+let F = (W/2000);
+let S = 850 * F; // scale
 let s = 1; // Math.log10(S);
 let ML = 1000;
 
@@ -13,7 +14,7 @@ let I = 0;
 let iMax = 5000;
 
 function setup() {
-  pixelDensity(2);
+  pixelDensity(1);
   createCanvas(W, H);
   background(0);
   noFill();
@@ -25,18 +26,19 @@ function draw() {
     mandel().map((_m, i) => {
       let t = (i / ML) * 100;
       stroke(255, 255, 255, t);
-      strokeWeight(t / 25);
+      strokeWeight(t / (100 / F));
       point(_m[0] * S + W2, _m[1] * S + H2);
     });
   }
   I++;
   if (I > iMax) {
-    saveCanvas('mandel', 'png')
+    saveCanvas('mandel', 'png');
+    saveCanvas('mandel', 'jpg');
     noLoop();
   }
 }
 
-let G = W / 10 / (W / 2000);
+let G = W / 10 / F;
 
 function mandel() {
 
