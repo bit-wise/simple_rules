@@ -1,62 +1,62 @@
 // Zn+1= Zn^2 + [x, y]
-let H = window.innerHeight;
-let W = window.innerWidth;
+let W = 8000; // window.innerWidth;
+let H = W; // window.innerHeight;
 let H2 = H / 2;
 let W2 = W / 2;
-let S = 500; // scale
+let S = 600 * (W / 2000); // scale
 let s = 1; // Math.log10(S);
+let ML = 1000;
+
+let sr2 = Math.sqrt(2);
+let sr22 = sr2 * 2;
+let I = 0;
+let iMax = 5000;
 
 function setup() {
+  pixelDensity(2);
   createCanvas(W, H);
   background(0);
+  noFill();
+  stroke(255);
 }
 
 function draw() {
-  // background(255,255,255,1)
-  for (let i = 0; i < 10; i++) {
-    // stroke(
-    //   Math.round(Math.random() * 255),
-    //   Math.round(Math.random() * 255),
-    //   Math.round(Math.random() * 255),
-    // );
-    strokeWeight(0.25);
-    noFill();
+  for (let j = 0; j < 100; j++) {
     mandel().map((_m, i) => {
-      stroke(255, 255, 255 ,i/10);
+      let t = (i / ML) * 100;
+      stroke(255, 255, 255, t);
+      strokeWeight(t / 25);
       point(_m[0] * S + W2, _m[1] * S + H2);
     });
   }
-}
-
-let l = 500 / S;
-let sr2 = Math.sqrt(2);
-let inc = 1;
-let j = -sr2;
-let k = -sr2;
-
-function mandel() {
-  j += inc;
-  if (j > sr2) {
-    j = -sr2;
-    k += inc;
-  }
-  if (k > sr2) {
-    k = -sr2;
-    inc = inc / 2;
-  }
-  if(inc < 0.004){
+  I++;
+  if (I > iMax) {
     saveCanvas('mandel', 'png')
     noLoop();
-     }
-  cx = k;
-  cy = j;
-  // cx = Math.random() * (l * 2) - l;
-  // cy = Math.random() * (l * 2) - l;
+  }
+}
+
+let G = W / 10 / (W / 2000);
+
+function mandel() {
+
+  let cx = Math.round((Math.random() * sr22 - sr2) * G) / G;
+  let cy = Math.round((Math.random() * sr22 - sr2) * G) / G;
   let z = [0, 0];
   let rz = [];
-  for (let i = 0; i < 1000; i++) {
+  if (Math.sqrt(Math.pow(cx, 2) + Math.pow(cy, 2)) > sr2) {
+    return rz;
+  }
+  for (let i = 0; i < ML; i++) {
     z = m([z[0], z[1]], [cx, cy]);
     rz.push(z);
+    if (rz.length == 4) {
+      let t = py(rz, 2, 1);
+      if (t >= sr22 || t <= 0) {
+        rz = [];
+        break;
+      }
+    }
   }
   return rz;
 }
@@ -65,4 +65,9 @@ function m(a, c) {
   let x = a[0] * a[0] - a[1] * a[1];
   let y = 2 * (a[0] * a[1]);
   return [x + c[0], y + c[1]];
+}
+
+function py(y, a, b) {
+  return Math.sqrt(Math.pow(y[a][0] - y[a + 1][0], 2) + Math.pow(y[a][1] - y[a + 1][1], 2)) /
+    Math.sqrt(Math.pow(y[b][0] - y[b + 1][0], 2) + Math.pow(y[b][1] - y[b + 1][1], 2));
 }
