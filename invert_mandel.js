@@ -1,5 +1,5 @@
 // Zn+1= Zn^2 + [x, y]
-let W = 8000; // window.innerWidth;
+let W = 10000; // window.innerWidth;
 let H = W; // window.innerHeight;
 let H2 = H / 2;
 let W2 = W / 1.575;
