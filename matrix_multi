@@ -1,0 +1,101 @@
+//   I J K
+// | 1 0 0 |
+// | 0 1 0 |
+// | 0 0 1 |
+
+// {
+//   I:{x:1, y:0, z:0}, // vector along x-axis
+//   J:{x:0, y:1, z:0}, // vector along y-axis
+//   K:{x:0, y:0, z:1}, // vector along z-axis
+// }
+
+// basis vectors
+let bv = [
+  [
+    [1, 0, 0],
+    [0, 1, 0],
+    [0, 0, 1]
+  ],
+];
+
+function mm(v, t) {
+  if (t.length === 0) {
+    return v;
+  }
+  let _A = new Array(v.length).fill(0);
+  t[0].map((_t, j) => {
+    let _a = 0;
+    v.map((_v, i) => _a += _v * _t[i]);
+    _A[j] = _a;
+  });
+  t.shift();
+  return mm(_A, t);
+}
+
+// Drawing setup
+let W = 400;
+let H = W;
+let W2 = W / 2;
+let H2 = W2;
+let W4 = W2 / 2;
+let H4 = W4;
+let F = 100; // scaling factor
+let t, A, _mm;
+
+function setup() {
+  createCanvas(W, H);
+  frameRate(10);
+  A = [1, 1, 0];
+}
+
+function Rd() {
+  return Math.random() * 2 - 1;
+}
+let xs = -2
+let ys = -2
+
+function draw() {
+  translate(W2, H2);
+  t = [
+    // [
+    //   [Rd(), Rd(), Rd()],
+    //   [Rd(), Rd(), Rd()],
+    //   [Rd(), Rd(), Rd()]
+    // ],
+    [
+      [0, ys, 0],
+      [xs, 0, 0],
+      [0, 0, 1]
+    ],
+  ];
+  xs += 0.1;
+  xs = xs > 2 ? -2 : xs;
+  ys += 0.01;
+  ys = ys > 2 ? -2 : ys;
+  _mm = mm(A, t);
+  background(0);
+
+  stroke(128);
+  line(-W2, -H4, W2, -H4);
+  line(-W2, 0, W2, 0);
+  line(-W2, H4, W2, H4);
+  line(-W4, -H2, -W4, H2);
+  line(0, -H2, 0, H2);
+  line(W4, -H2, W4, H2);
+
+  stroke(0, 128, 255);
+  line(0, 0, A[0] * F, A[1] * F);
+
+  stroke(0, 255, 128);
+  line(0, 0, _mm[0] * F, _mm[1] * F);
+
+  stroke(0, 255, 128, 100);
+  let mmAx = (_mm[0] / A[0])
+  let mmAy = (_mm[1] / A[1])
+  // line(-W2, -H4 * mmAy, W2, -H4 * mmAy);
+  // line(-W2, 0 * mmAy, W2, 0 * mmAy);
+  // line(-W2,  H4 * mmAy, W2, H4 * mmAy);
+  line(-W4 * mmAx, -H2, -W4 * mmAx, H2);
+  line(0 * mmAx, -H2, 0 * mmAx, H2);
+  line(W4 * mmAx, -H2, W4 * mmAx, H2);
+}
