@@ -18,16 +18,43 @@
 //   ],
 // ];
 
-function mm(v, t) {
-  if (t.length === 0) {
-    return v;
-  }
+// Transform Queue
+function TQ(v, t) {
+  let _A = [];
+  t.map((_t, j) => {
+    _A = MM(v, t[j]);
+  });
+  return _A;
+}
+
+// Matrix Multiplier
+function MM(v, t) {
   let _A = new Array(v.length).fill(0);
-  t[0].map((_t, j) => {
+  t.map((_t, j) => {
     let _a = 0;
-    v.map((_v, i) =>  _a += (_v != undefined ? _v : 0) * (_t[i] != undefined ? _t[i] : 0));
+    v.map((_v, i) => _a += (_v != undefined ? _v : 0) * (_t[i] != undefined ? _t[i] : 0));
     _A[j] = _a;
   });
-  t.shift();
-  return mm(_A, t);
+  return _A;
+}
+
+// Inverse Matrix
+function IM(v) {
+  let _I = [];
+  v.map((a, i) => {
+    _I[i] = [];
+    v.map((b, j) => {
+      _I[i][j] = i === j ? -1 : 0;
+    });
+  });
+  let _i = MM(v.reverse(), _I.reverse());
+  console.log(_i)
+  let _IMM = [];
+  _i.map((a, i) => {
+    _IMM[i] = [];
+    _i.map((b, j) => {
+      _IMM[i][j] = i === j ? b : 0;
+    });
+  });
+  return _IMM;
 }
